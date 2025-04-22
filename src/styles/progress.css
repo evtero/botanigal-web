@@ -1,0 +1,139 @@
+.progress-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: 80vh;
+}
+
+/* Panel de recompensas */
+.rewards-panel {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Mensaje superior */
+.progress-message {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0;
+}
+
+.progress-points {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Grid fijo de 3 columnas x 2 filas */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: auto;
+  gap: 1.5rem;
+  justify-items: center;
+  margin-top: 0rem;
+}
+
+/* Cada card */
+.plant-card {
+  width: 100%;
+  max-width: 300px;
+  height: 250px;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Contenedor de imagen */
+.plant-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Imagen base */
+.plant-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+
+/* Imagen desbloqueada ocupa todo */
+.plant-image-container.unlocked .plant-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* Imagen bloqueada se mantiene centrada */
+.plant-image-container:not(.unlocked) .plant-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+/* Efecto blur al hacer hover */
+.plant-image-container.unlocked:hover .plant-image {
+  filter: blur(3px) brightness(0.9);
+}
+
+/* Overlay con el nombre centrado */
+.plant-name-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-style: italic;
+  color: white;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.plant-image-container.unlocked:hover .plant-name-overlay {
+  opacity: 1;
+}
+
+/* Info de progreso (solo visible si no está desbloqueado) */
+.plant-info {
+  padding: 1rem;
+}
+
+/* Barra de progreso */
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--main-color, #97E781);
+  transition: width 0.3s ease;
+}

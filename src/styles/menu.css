@@ -1,0 +1,41 @@
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%; 
+  gap: 1rem; 
+  margin-top: 10rem;
+}
+
+.menu-container button {
+  padding: 1rem 2.5rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.menu-list {
+  margin-top: 5rem;
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
+}
+
+/* Titulo arriba */
+.li-title {
+  font-size: 1.4rem;
+  font-weight: 300;
+  opacity: 0.8;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+/* Contenedor en fila */
+.menu-list li:not(.li-title) {
+  display: inline-block;
+  margin: 0 1rem;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--secondary-color);
+  font-weight: 400;
+}

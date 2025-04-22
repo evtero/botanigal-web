@@ -1,0 +1,31 @@
+.score-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    min-height: 60vh;
+    border-radius: 12px;
+  }
+  
+  .score-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--main-color);
+  }
+  
+  .score-subtitle {
+    font-size: 2.3rem;
+    font-weight: normal;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+  }
+  
+  .score-button {
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+  }
+  .score-button:hover {
+    background-color: var(--accent-color);
+  }
+  
