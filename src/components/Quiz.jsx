@@ -1,12 +1,11 @@
 // Quiz.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadValidPairs } from "../utils/quizLogic";
 import { supabase } from "../services/supabaseClient";
 import "../styles/quiz.css";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Quiz() {
   // Estados para gestionar el progreso del quiz
@@ -19,23 +18,32 @@ export default function Quiz() {
     message: "",
     name: "",
     description: "",
-    isCorrect: null
+    isCorrect: null,
   }); // texto de feedback
+
+  const feedbackRef = useRef(null);
 
   const navigate = useNavigate();
 
   const [showHint, setShowHint] = useState(() => {
     // solo se ejecuta una vez al montar el componente
-    const hasSeenHint = localStorage.getItem('hasSeenHint');
+    const hasSeenHint = localStorage.getItem("hasSeenHint");
     return !hasSeenHint; // si no lo ha visto, mostrarlo
   });
-  
-
 
   // Cargar las preguntas al inicio
   useEffect(() => {
     loadValidPairs().then(setQuizData);
   }, []);
+
+  useEffect(() => {
+    if (feedbackText.message && feedbackRef.current) {
+      feedbackRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [feedbackText.message]);
 
   const question = quizData[current]; // obtener pregunta actual
 
@@ -58,14 +66,15 @@ export default function Quiz() {
       message: isCorrect ? "✅ Correcto" : "❌ Incorrecto",
       name: option,
       description,
-      isCorrect
+      isCorrect,
     });
     if (showHint) {
-      toast.info("Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones.");
-      localStorage.setItem('hasSeenHint', 'true');
+      toast.info(
+        "Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones."
+      );
+      localStorage.setItem("hasSeenHint", "true");
       setShowHint(false); // opcional: para que no vuelva a entrar en esta sesión
     }
-    
   };
 
   // Pasar a la siguiente pregunta/finalizar
@@ -75,7 +84,12 @@ export default function Quiz() {
       setCurrent((prev) => prev + 1);
       setSelected(null);
       setAnswered(false);
-      setFeedbackText({ message: "", name: "", description: "", isCorrect: null });
+      setFeedbackText({
+        message: "",
+        name: "",
+        description: "",
+        isCorrect: null,
+      });
     } else {
       // Guardar resultados finales
       const { data: userData } = await supabase.auth.getUser();
@@ -92,7 +106,7 @@ export default function Quiz() {
         user,
         ronda,
         finalscore: score,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       });
 
       if (error) {
@@ -104,8 +118,8 @@ export default function Quiz() {
         state: {
           score,
           total: quizData.length,
-          ronda
-        }
+          ronda,
+        },
       });
     }
   };
@@ -125,11 +139,7 @@ export default function Quiz() {
         <div className="quiz-body">
           {/* Columna izquierda: imagen */}
           <div className="quiz-image-container">
-            <img
-              src={question.image}
-              alt="Planta"
-              className="quiz-image"
-            />
+            <img src={question.image} alt="Planta" className="quiz-image" />
           </div>
 
           {/* Columna derecha: opciones + siguiente + feedback */}
@@ -164,16 +174,26 @@ export default function Quiz() {
             </div>
 
             {/* feedback visual */}
-            <div className="quiz-feedback">
+            <div className="quiz-feedback" ref={feedbackRef}>
               {feedbackText.message && (
-                <div>
-                  <p style={{ color: feedbackText.isCorrect ? "green" : "red"}}>
+                <div className="feedback-content">
+                  <p
+                    className={`feedback-message ${
+                      feedbackText.isCorrect
+                        ? "feedback-correct"
+                        : "feedback-incorrect"
+                    }`}
+                  >
                     {feedbackText.message}
                   </p>
-                  <p style={{ fontWeight: "bold", fontStyle: "italic", color: "black" }}>
-                    {feedbackText.name}
-                  </p>
-                  <p style={{ color: feedbackText.isCorrect ? "green" : "red" }}>
+                  <p className="feedback-name">{feedbackText.name}</p>
+                  <p
+                    className={`feedback-description ${
+                      feedbackText.isCorrect
+                        ? "feedback-correct"
+                        : "feedback-incorrect"
+                    }`}
+                  >
                     {feedbackText.description}
                   </p>
                 </div>
@@ -184,6 +204,5 @@ export default function Quiz() {
       </div>
       <ToastContainer position="top-center" autoClose={3500} hideProgressBar />
     </div>
-    
   );
 }
