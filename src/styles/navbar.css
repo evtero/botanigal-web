@@ -14,10 +14,6 @@
 }
 
 .navbar-buttons button {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-
   width: auto;
   background-color: transparent;
   color: var(--text-color);
