@@ -7,16 +7,18 @@
   padding: 1rem 2rem;
   background-color: white; /* opcional para mayor contraste */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  
-  }
-  .navbar-title {
-    margin: 0;
-    font-size: 1.6rem;
-  }
-  
-  .navbar-buttons button {
+}
+.navbar-title {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.navbar-buttons button {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
   width: auto;
-  margin-left: 0.5rem;
   background-color: transparent;
   color: var(--text-color);
   padding: 0.5rem 1rem;
@@ -27,13 +29,22 @@
   transition: background-color 0.3s ease;
 }
 
-  .navbar-buttons button:hover {
-    background-color: rgba(0, 0, 0, 0.052);
+.navbar-buttons button:hover {
+  background-color: rgba(0, 0, 0, 0.052);
+}
+
+.nickname {
+  font-size: 1.2rem;
+  color: var(--main-color);
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .navbar-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .nickname{
-    font-size: 1.2rem;
-    color: var(--main-color);
-    font-weight: bold;
-    margin-right: 1rem;
-  }
+  /* Yo aqui bajaria el tamaño de la fuente */
+}
