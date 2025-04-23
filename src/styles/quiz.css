@@ -46,7 +46,7 @@
 .quiz-image {
   width: 100%;
   height: 100%;
-  object-fit: contain ; /* cover */
+  object-fit: contain; /* cover */
 }
 
 /* Panel derecho */
@@ -78,7 +78,6 @@
 
 /* Botón siguiente */
 .quiz-next {
-  
   display: flex;
   justify-content: center;
   margin-top: 0.5rem;
@@ -99,6 +98,10 @@
 
 .next-button:hover {
   background-color: #f0f0f0;
+}
+
+.next-button:disabled {
+  cursor: not-allowed;
 }
 
 /* Área de feedback */
@@ -125,7 +128,6 @@
   opacity: 0.5;
 }
 
-
 .Toastify__toast {
   font-size: 1rem;
   background-color: #f0fff4;
@@ -151,5 +153,10 @@
   border: none;
   cursor: pointer;
 }
-
-
+@media (max-width: 560px) {
+  .quiz-body {
+    flex-direction: column;
+    align-items: center;
+    /* aqui puedes meter otro height para fomratos moviles, pero no soy muy amigo de trabajar con terminos absolutos (px) */
+  }
+}
