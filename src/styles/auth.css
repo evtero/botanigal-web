@@ -12,7 +12,7 @@
   .auth-panel {
     margin-top: 2rem;
     flex: 1;
-    background-color: var(--background-color, #fff);
+    background-color: transparent;
     border-radius: 12px;
     padding: 2rem;
     /* box-shadow: 0 0 12px rgba(0, 0, 0, 0.05); */
@@ -76,18 +76,18 @@
     }
   
     .auth-panel input {
-      font-size: calc(var(--font-size-base) - 0.2rem);
+      font-size: calc(var(--font-size-base));
     }
   
     .auth-panel button {
-      font-size: calc(var(--font-size-base) - 0.2rem);
+      font-size: calc(var(--font-size-base));
     }
   
     .auth-message {
-      font-size: calc(var(--font-size-base) - 0.4rem);
+      font-size: calc(var(--font-size-base) - 0.2rem);
     }
   
     .auth-toggle {
-      font-size: calc(var(--font-size-base) - 0.2rem);
+      font-size: calc(var(--font-size-base) - 0.1rem);
     }
   }

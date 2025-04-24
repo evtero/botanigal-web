@@ -144,11 +144,15 @@
     justify-items: stretch; /* que las cards ocupen todo el ancho disponible */
   }
 
+  .progress-message{
+    font-size: calc(var(--font-size-base) - 0rem);
+  }
+
   .plant-card {
     max-width: 100%;
   }
 
   .progress-container {
-    padding: 1rem 0.5rem;
+    padding: 0rem 0.5rem;
   }
 }

@@ -3,6 +3,11 @@ import { supabase } from "../services/supabaseClient";
 const SUPABASE_URL = "https://pxsglndjxamerugltlmr.supabase.co"; 
 const BUCKET_NAME = "species-images";
 
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+
 export async function loadValidPairs() {
   const { data: speciesList, error } = await supabase
     .from("species")
@@ -20,17 +25,19 @@ export async function loadValidPairs() {
     `);
 
   if (error) {
-    console.error("❌ Error al cargar especies:", error.message);
+    console.error("Error al cargar especies:", error.message);
     return [];
   }
 
+  const usedImages = new Set();
   const validPairs = [];
-  const usedImages = new Set(); //  Para evitar imágenes repetidas
 
-  for (let i = 0; i < speciesList.length; i++) {
-    for (let j = i + 1; j < speciesList.length; j++) {
-      const A = speciesList[i];
-      const B = speciesList[j];
+  const shuffledSpecies = shuffle([...speciesList]);
+
+  for (let i = 0; i < shuffledSpecies.length; i++) {
+    for (let j = i + 1; j < shuffledSpecies.length; j++) {
+      const A = shuffledSpecies[i];
+      const B = shuffledSpecies[j];
 
       if (
         A.speciesname === B.speciesname ||
@@ -56,7 +63,7 @@ export async function loadValidPairs() {
 
       const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${A.speciesimage}.webp`;
 
-      if (usedImages.has(imageUrl)) continue; // Si ya se usó, se salta
+      if (usedImages.has(imageUrl)) continue;
 
       validPairs.push({
         image: imageUrl,
@@ -69,17 +76,12 @@ export async function loadValidPairs() {
         }
       });
 
-      usedImages.add(imageUrl); //  Marca como usada
-
-      if (validPairs.length >= 5) break;
+      usedImages.add(imageUrl);
     }
-    if (validPairs.length >= 5) break;
   }
 
-  console.log("🎯 Pares válidos encontrados:", validPairs);
-  return validPairs;
+  const finalPairs = shuffle(validPairs).slice(0, 5); // Selecciona 5 aleatorios
+  console.log("Pares válidos generados aleatoriamente:", finalPairs);
+  return finalPairs;
 }
 
-function shuffle(array) {
-  return array.sort(() => Math.random() - 0.5);
-}

@@ -34,7 +34,7 @@
 .menu-list li:not(.li-title) {
   display: inline-block;
   margin: 0 1rem;
-  font-size: calc(var(--font-size-base) + 0.1rem);
+  font-size: calc(var(--font-size-base));
   font-style: italic;
   color: var(--secondary-color);
   font-weight: 400;

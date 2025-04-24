@@ -1,12 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
 import { supabase } from "../services/supabaseClient";
 
+
 export default function Navbar() {
+  const menuRef = useRef(null);
   const [nick, setNick] = useState(null);
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para el menú desplegable
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+  
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+  
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   // Obtiene el usuario actual y extrae el nick (antes del @)
   const updateNick = async () => {
@@ -56,16 +74,23 @@ export default function Navbar() {
           </div>
         )}
 
+
+        {nick && (
+          <span className="nickname-mobile mobile-only">{nick}</span>
+        )}
         <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>☰</div>
       </nav>
 
       {/* Slide menu solo en móvil */}
-      <div className={`slide-menu ${isMenuOpen ? "open" : ""}`}>
-        <button onClick={() => { navigate("/menu"); setIsMenuOpen(false); }}>🍀Inicio</button>
-        <button onClick={() => { navigate("/progress"); setIsMenuOpen(false); }}>📈Progreso</button>
-        <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}>🚪Salir</button>
-        <button className="close-btn" onClick={() => setIsMenuOpen(false)}>☰</button>
-      </div>
+      {nick && (
+        
+        <div ref={menuRef} className={`slide-menu ${isMenuOpen ? "open" : ""}`}>
+          <button onClick={() => { navigate("/menu"); setIsMenuOpen(false); }}>Inicio</button>
+          <button onClick={() => { navigate("/progress"); setIsMenuOpen(false); }}>Progreso</button>
+          <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}>Salir</button>
+          <button className="close-btn" onClick={() => setIsMenuOpen(false)}>X</button>
+        </div>
+      )}
     </>
   );
 }

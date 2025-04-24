@@ -44,7 +44,7 @@
   
     .score-button {
       padding: 0.6rem 1.5rem;
-      font-size: calc(var(--font-size-base) - 0.1rem);
+      font-size: calc(var(--font-size-base) + 0.1rem);
     }
 
   }

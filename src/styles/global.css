@@ -95,4 +95,10 @@ a:hover {
   :root {
     --font-size-base: 1rem;
   }
+
+  .background-svg {
+    background: url("/src/assets/bg.svg") no-repeat center bottom;
+    background-size: contain;
+    
+  }
 }
