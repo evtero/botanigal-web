@@ -25,11 +25,9 @@ export default function Quiz() {
 
   const navigate = useNavigate();
 
-  const [showHint, setShowHint] = useState(() => {
-    // solo se ejecuta una vez al montar el componente
-    const hasSeenHint = localStorage.getItem("hasSeenHint");
-    return !hasSeenHint; // si no lo ha visto, mostrarlo
-  });
+  const [showHint, setShowHint] = useState(false);
+  const [nick, setNick] = useState(null);
+
 
   // Cargar las preguntas al inicio
   useEffect(() => {
@@ -44,6 +42,24 @@ export default function Quiz() {
       });
     }
   }, [feedbackText.message]);
+
+  useEffect(() => {
+    const updateNick = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const email = user.email;
+        const nickname = email.split("@")[0];
+        setNick(nickname);
+  
+        // Verificamos si este usuario ya vio el hint
+        const hintKey = `hasSeenHint-${nickname}`;
+        const hasSeenHint = localStorage.getItem(hintKey);
+        setShowHint(!hasSeenHint);
+      }
+    };
+  
+    updateNick();
+  }, []);
 
   const question = quizData[current]; // obtener pregunta actual
 
@@ -68,12 +84,10 @@ export default function Quiz() {
       description,
       isCorrect,
     });
-    if (showHint) {
-      toast.info(
-        "Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones."
-      );
-      localStorage.setItem("hasSeenHint", "true");
-      setShowHint(false); // opcional: para que no vuelva a entrar en esta sesión
+    if (showHint && nick) {
+      toast.info("Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones.");
+      localStorage.setItem(`hasSeenHint-${nick}`, "true");
+      setShowHint(false);
     }
   };
 

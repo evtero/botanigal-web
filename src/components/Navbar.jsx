@@ -15,6 +15,7 @@ export default function Navbar() {
       const email = user.email;
       const nickname = email.split("@")[0];
       setNick(nickname);
+      
     } else {
       setNick(null);
     }
@@ -45,13 +46,15 @@ export default function Navbar() {
     <>
       <nav className="navbar">
         <h1 className="navbar-title">🌿botanigal</h1>
-        {nick && <span className="nickname">{nick}</span>}
+        {nick && <span className="nickname desktop-only">{nick}</span>}
         
-        <div className="navbar-buttons desktop-only">
-          <button onClick={() => navigate("/menu")}>Inicio 🍀</button>
-          <button onClick={() => navigate("/progress")}>Progreso 📈</button>
-          <button onClick={handleLogout}>Salir 🚪</button>
-        </div>
+        {nick && (
+          <div className="navbar-buttons desktop-only">
+            <button onClick={() => navigate("/menu")}>Inicio 🍀</button>
+            <button onClick={() => navigate("/progress")}>Progreso 📈</button>
+            <button onClick={handleLogout}>Salir 🚪</button>
+          </div>
+        )}
 
         <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>☰</div>
       </nav>
