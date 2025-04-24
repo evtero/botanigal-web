@@ -19,7 +19,7 @@
 /* Mensaje superior */
 .progress-message {
   text-align: center;
-  font-size: 1.4rem;
+  font-size: calc(var(--font-size-base) + 0.1rem);
   font-weight: 600;
   color: #333;
   margin-bottom: 0;
@@ -27,7 +27,7 @@
 
 .progress-points {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: calc(var(--font-size-base) - 0.1rem);
   color: #666;
 }
 
@@ -136,4 +136,19 @@
   height: 100%;
   background-color: var(--main-color, #97E781);
   transition: width 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    justify-items: stretch; /* que las cards ocupen todo el ancho disponible */
+  }
+
+  .plant-card {
+    max-width: 100%;
+  }
+
+  .progress-container {
+    padding: 1rem 0.5rem;
+  }
 }

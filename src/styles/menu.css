@@ -10,7 +10,7 @@
 
 .menu-container button {
   padding: 1rem 2.5rem;
-  font-size: 1.6rem;
+  font-size: calc(var(--font-size-base) + 0.3rem);
   font-weight: bold;
 }
 
@@ -23,7 +23,7 @@
 
 /* Titulo arriba */
 .li-title {
-  font-size: 1.4rem;
+  font-size: calc(var(--font-size-base) + 0.1rem);
   font-weight: 300;
   opacity: 0.8;
   color: var(--text-color);
@@ -34,7 +34,7 @@
 .menu-list li:not(.li-title) {
   display: inline-block;
   margin: 0 1rem;
-  font-size: 1.2rem;
+  font-size: calc(var(--font-size-base) + 0.1rem);
   font-style: italic;
   color: var(--secondary-color);
   font-weight: 400;

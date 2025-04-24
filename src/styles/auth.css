@@ -49,7 +49,7 @@
   
   .auth-toggle {
     margin-top: 1.2rem;
-    font-size: 0.9rem;
+    font-size: calc(var(--font-size-base) - 0.4rem);
     color: var(--text-color, #444);
   }
   
@@ -58,4 +58,36 @@
     font-weight: bold;
     cursor: pointer;
     text-decoration: underline;
+  }
+
+
+  @media (max-width: 600px) {
+    
+    .auth-wrapper {
+      padding: 2rem 1rem;
+    }
+  
+    .auth-panel {
+      padding: 1.5rem;
+    }
+  
+    .auth-panel h2 {
+      font-size: calc(var(--font-size-base) + 0.5rem);
+    }
+  
+    .auth-panel input {
+      font-size: calc(var(--font-size-base) - 0.2rem);
+    }
+  
+    .auth-panel button {
+      font-size: calc(var(--font-size-base) - 0.2rem);
+    }
+  
+    .auth-message {
+      font-size: calc(var(--font-size-base) - 0.4rem);
+    }
+  
+    .auth-toggle {
+      font-size: calc(var(--font-size-base) - 0.2rem);
+    }
   }

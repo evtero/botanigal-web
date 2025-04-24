@@ -7,33 +7,130 @@
   padding: 1rem 2rem;
   background-color: white; /* opcional para mayor contraste */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  
-  }
-  .navbar-title {
-    margin: 0;
-    font-size: 1.6rem;
-  }
-  
-  .navbar-buttons button {
+}
+.navbar-title {
+  margin: 0;
+  font-size: calc(var(--font-size-base) + 0.2rem);
+}
+
+
+.navbar-buttons button {
   width: auto;
-  margin-left: 0.5rem;
   background-color: transparent;
   color: var(--text-color);
   padding: 0.5rem 1rem;
   border-radius: 30px;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: calc(var(--font-size-base) - 0.2rem);
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
 
-  .navbar-buttons button:hover {
-    background-color: rgba(0, 0, 0, 0.052);
+.navbar-buttons button:hover {
+  background-color: rgba(0, 0, 0, 0.052);
+}
+
+.nickname {
+  font-size: calc(var(--font-size-base) - 0.2rem);
+  color: var(--main-color);
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.hamburger {
+  display: none;
+  font-size: calc(var(--font-size-base) + 0.7rem);
+  cursor: pointer;
+}
+
+/* SLIDE MENU */
+.slide-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  height: 100vh;
+  width: 85%;
+  max-width: 100px;
+  background-color: white;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 2rem 1.5rem;
+  transition: right 0.3s ease;
+  z-index: 1000;
+}
+
+.slide-menu.open {
+  right: 0;
+}
+
+.slide-menu button {
+  font-size: var(--font-size-base);
+  background: none;
+  border: none;
+  padding: 0.75rem 0;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: var(--text-color);
+}
+
+.slide-menu button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Botón de cerrar igual estilo */
+.slide-menu .close-btn {
+  margin-top: 1rem; /* Lo empuja al fondo del panel */
+  text-align: left;
+  font-size: calc(var(--font-size-base) + 0.2rem);
+  font-weight: bold;
+  background-color: transparent;
+  
+
+}
+
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative; /* importante */
+    padding: 0.2rem 1rem;
   }
 
-  .nickname{
-    font-size: 1.2rem;
-    color: var(--main-color);
-    font-weight: bold;
-    margin-right: 1rem;
+  .hamburger {
+    display: block;
   }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .navbar-buttons {
+    position: absolute;
+    top: 100%; /* debajo de la navbar */
+    right: 1rem;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+    border-radius: 8px;
+    display: none;
+    flex-direction: column;
+    z-index: 999;
+    width: max-content;
+    min-width: 200px;
+  }
+
+  .navbar-buttons.show {
+    display: flex;
+  }
+
+  .navbar-buttons button {
+    width: 100%;
+    font-size: 1rem;
+  }
+}

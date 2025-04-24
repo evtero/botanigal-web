@@ -6,6 +6,7 @@ import { supabase } from "../services/supabaseClient";
 export default function Navbar() {
   const [nick, setNick] = useState(null);
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para el menú desplegable
 
   // Obtiene el usuario actual y extrae el nick (antes del @)
   const updateNick = async () => {
@@ -41,19 +42,27 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar">
-      <h1 className="navbar-title">🌿botanigal</h1>
-      <div className="navbar-buttons">
-        {nick && (
-          <>
-            {/* Mostrar nombre y botones solo si hay sesion */}
-            <span className="nickname">{nick}</span>
-            <button onClick={() => navigate("/menu")}>Inicio 🍀</button>
-            <button onClick={() => navigate("/progress")}>Progreso 📈</button>
-            <button onClick={handleLogout}>Salir 🚪</button>
-          </>
-        )}
+    <>
+      <nav className="navbar">
+        <h1 className="navbar-title">🌿botanigal</h1>
+        {nick && <span className="nickname">{nick}</span>}
+        
+        <div className="navbar-buttons desktop-only">
+          <button onClick={() => navigate("/menu")}>Inicio 🍀</button>
+          <button onClick={() => navigate("/progress")}>Progreso 📈</button>
+          <button onClick={handleLogout}>Salir 🚪</button>
+        </div>
+
+        <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>☰</div>
+      </nav>
+
+      {/* Slide menu solo en móvil */}
+      <div className={`slide-menu ${isMenuOpen ? "open" : ""}`}>
+        <button onClick={() => { navigate("/menu"); setIsMenuOpen(false); }}>🍀Inicio</button>
+        <button onClick={() => { navigate("/progress"); setIsMenuOpen(false); }}>📈Progreso</button>
+        <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}>🚪Salir</button>
+        <button className="close-btn" onClick={() => setIsMenuOpen(false)}>☰</button>
       </div>
-    </nav>
+    </>
   );
 }

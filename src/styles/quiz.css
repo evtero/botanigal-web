@@ -18,8 +18,8 @@
   display: flex;
   justify-content: space-between;
   font-weight: bold;
-  font-size: 1.1rem;
-  padding: 1rem;
+  font-size: calc(var(--font-size-base) - 0.1rem);
+  padding: 0.5rem;
   background-color: white;
 }
 
@@ -46,7 +46,7 @@
 .quiz-image {
   width: 100%;
   height: 100%;
-  object-fit: contain ; /* cover */
+  object-fit: contain; /* cover */
 }
 
 /* Panel derecho */
@@ -69,7 +69,7 @@
 .quiz-option {
   width: 100%;
   padding: 0.75rem;
-  font-size: 1rem;
+  font-size: calc(var(--font-size-base) - 0.3rem);
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -78,7 +78,6 @@
 
 /* Botón siguiente */
 .quiz-next {
-  
   display: flex;
   justify-content: center;
   margin-top: 0.5rem;
@@ -86,7 +85,7 @@
 
 .next-button {
   padding: 0.4rem 1rem;
-  font-size: 0.9rem;
+  font-size: calc(var(--font-size-base) - 0.3rem);
   border-radius: 20px;
   background-color: transparent;
   color: black;
@@ -101,6 +100,10 @@
   background-color: #f0f0f0;
 }
 
+.next-button:disabled {
+  cursor: not-allowed;
+}
+
 /* Área de feedback */
 .quiz-feedback {
   flex-grow: 1;
@@ -112,7 +115,7 @@
   text-align: center;
   overflow-y: auto;
   padding: 0.5rem;
-  font-size: 1.2rem;
+  font-size: calc(var(--font-size-base) - 0.2rem);
 }
 
 .quiz-option.correct {
@@ -125,9 +128,43 @@
   opacity: 0.5;
 }
 
+.feedback-content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.feedback-message {
+  font-size: calc(var(--font-size-base) - 0.1rem);
+  font-weight: bold;
+  margin: 0;
+}
+
+.feedback-name {
+  font-weight: bold;
+  font-style: italic;
+  color: black;
+  margin: 0;
+  font-size: calc(var(--font-size-base) - 0.1rem);
+}
+
+.feedback-description {
+  font-size: calc(var(--font-size-base) - 0.1rem);
+  margin: 0;
+}
+
+.feedback-correct {
+  color: green;
+}
+
+.feedback-incorrect {
+  color: red;
+}
 
 .Toastify__toast {
-  font-size: 1rem;
+  font-size: calc(var(--font-size-base) - 0.3rem);
   background-color: #f0fff4;
   color: #2f855a;
   border: 1px solid #a0d8b3;
@@ -153,3 +190,80 @@
 }
 
 
+@media (max-width: 600px) {
+  .quiz-body {
+    flex-direction: column;
+    align-items: center;
+    /* aqui puedes meter otro height para fomratos moviles, pero no soy muy amigo de trabajar con terminos absolutos (px) */
+    width: 100%;
+    gap: 1rem;
+    height: auto; /* ?? */
+  }
+
+  .quiz-header {
+    padding: 0;
+  }
+
+  .quiz-image-container {
+    height: auto; /* evita que tome una altura innecesaria */
+    max-height: 40vh; /* hace que sea más compacta y responsiva */
+  }
+
+  .quiz-image-container,
+  .quiz-right {
+    width: 100%;
+
+  }
+
+  .quiz-image {
+    /* max-width: 100%; */
+    /* max-height: 100%; */
+    /* height: auto; */
+    object-fit: fill;
+    margin-bottom: 0;
+  }
+
+  .quiz-options {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+  }
+
+  .quiz-option {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: calc(var(--font-size-base) - 0.1rem);
+  }
+
+  .quiz-feedback {
+    width: 100%;
+    text-align: center;
+    margin-top: 0rem;
+    font-size: calc(var(--font-size-base) - 0.1rem);
+  }
+
+  .next-button {
+    width: 100%;
+    font-size: calc(var(--font-size-base) - 0.2rem);
+    display: block;
+  }
+
+  .quiz-next {
+    width: 100%;
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+  }
+  .quiz-container {
+    min-height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 1rem;
+  }
+}
