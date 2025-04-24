@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+log.txt
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node.js dependencies
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+
+# Archivos del sistema / backups
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+
+# Variables de entorno
+.env
+.env.*
+
+# Config local de Supabase
+supabase/config.toml
+supabase/.env
+supabase/secrets/*
+
+# Configs del editor
+.vscode/
+.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Otros
+*.local
