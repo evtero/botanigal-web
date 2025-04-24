@@ -11,7 +11,7 @@ import Auth from "./components/Auth";
 export default function App() {
   return (
     
-    <Router>
+    <Router basename="/botanigal-web">
       <div className="background-svg"></div>
       <Navbar />
       <Routes>
