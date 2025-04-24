@@ -14,7 +14,7 @@
   --secondary-background-color: #f0f0f0;
   --text-color: #090c10;
 
-  --font-size-base: 16px;
+  --font-size-base: 1.3rem;
   --spacing: 1.5rem;
 }
 
@@ -89,4 +89,10 @@ a {
 }
 a:hover {
   color: var(--main-color);
+}
+
+@media (max-width: 600px) {
+  :root {
+    --font-size-base: 1rem;
+  }
 }

@@ -130,7 +130,7 @@ export default function Quiz() {
         {/* Encabezado con pregunta actual y puntuacion */}
         <div className="quiz-header">
           <span className="question-count">
-            Pregunta {current + 1} / {quizData.length}
+            {current + 1} / {quizData.length}
           </span>
           <span className="score">Puntuacion: {score}</span>
         </div>
