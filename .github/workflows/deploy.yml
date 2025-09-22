@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages   # Nombre del workflow (lo verás en la pestaña Actions)
+
+on:
+  push:
+    branches: [ main ]         # Se ejecuta cada vez que haces "git push" a la rama main
+
+jobs:
+  build:                       # Primer job: compilar tu proyecto
+    runs-on: ubuntu-latest     # GitHub usará un servidor Linux para correr los pasos
+    steps:
+      - uses: actions/checkout@v3    # Paso 1: clona tu repo en el servidor de GitHub
+      - uses: actions/setup-node@v3  # Paso 2: instala Node.js
+        with:
+          node-version: 18            # Usamos Node 18 (recomendado por Vite/Supabase)
+      - run: npm ci                  # Paso 3: instala dependencias (usa package-lock.json)
+      - run: npm run build           # Paso 4: construye tu proyecto (genera la carpeta dist/)
+        env:                         # Aquí pasamos las variables de entorno al build
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      - uses: actions/upload-pages-artifact@v2   # Paso 5: guarda la carpeta dist/ como "artifact"
+        with:
+          path: dist
+
+  deploy:                      # Segundo job: desplegar en GitHub Pages
+    needs: build               # Solo corre si el build se hizo correctamente
+    runs-on: ubuntu-latest
+    permissions:               # Permisos para poder publicar en Pages
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/deploy-pages@v2   # Paso final: sube el artifact a GitHub Pages
