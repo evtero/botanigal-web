@@ -1,87 +1,132 @@
 import { supabase } from "../services/supabaseClient";
 
-const SUPABASE_URL = "https://pxsglndjxamerugltlmr.supabase.co"; 
 const BUCKET_NAME = "species-images";
 
 function shuffle(array) {
   return array.sort(() => Math.random() - 0.5);
 }
 
-
 export async function loadValidPairs() {
-  const { data: speciesList, error } = await supabase
-    .from("species")
+  console.log("🔄 Cargando especies para el quiz...");
+
+  // 🔑 1. Usuario actual
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData?.user?.email?.split("@")[0] || "anon";
+
+  // 🔑 2. Especies base (reward_species = false)
+  const { data: baseSpecies, error: baseError } = await supabase
+    .from("species_feature_all")
     .select(`
+      featureid,
+      featuredescription,
+      featurecategory,
       speciesid,
       speciesname,
+      speciescname_spa,
+      speciescname_gal,
+      speciescname_eng,
       speciesfamily,
       speciesimage,
-      species_feature (
-        feature:features (
-          category,
-          featuredescription
-        )
-      )
-    `);
+      reward_species
+    `)
+    .eq("reward_species", false);
 
-  if (error) {
-    console.error("Error al cargar especies:", error.message);
+  if (baseError) {
+    console.error("❌ Error al cargar especies base:", baseError.message);
     return [];
   }
+
+  // 🔑 3. Especies desbloqueadas por el usuario
+  const { data: unlockedList, error: unlockedError } = await supabase
+    .from("user_unlocked_species")
+    .select("speciesid")
+    .eq("user_email", user);
+
+  if (unlockedError) {
+    console.error("❌ Error cargando especies desbloqueadas:", unlockedError.message);
+    return [];
+  }
+
+  const unlockedIds = unlockedList?.map((u) => u.speciesid) || [];
+
+  let unlockedSpecies = [];
+  if (unlockedIds.length > 0) {
+    const { data, error } = await supabase
+      .from("species_feature_all")
+      .select(`
+        featureid,
+        featuredescription,
+        featurecategory,
+        speciesid,
+        speciesname,
+        speciescname_spa,
+        speciescname_gal,
+        speciescname_eng,
+        speciesfamily,
+        speciesimage,
+        reward_species
+      `)
+      .in("speciesid", unlockedIds);
+
+    if (error) {
+      console.error("❌ Error cargando detalles de especies desbloqueadas:", error.message);
+    } else {
+      unlockedSpecies = data || [];
+    }
+  }
+
+  // 🔑 4. Combinar base + desbloqueadas
+  const rows = [...(baseSpecies || []), ...unlockedSpecies];
+
+  console.log(`✅ ${rows.length} filas disponibles para el quiz.`);
+  console.table(rows.slice(0, 10));
 
   const usedImages = new Set();
   const validPairs = [];
 
-  const shuffledSpecies = shuffle([...speciesList]);
+  const shuffled = shuffle([...rows]);
+  console.log("🔀 Especies barajadas:", shuffled.length);
 
-  for (let i = 0; i < shuffledSpecies.length; i++) {
-    for (let j = i + 1; j < shuffledSpecies.length; j++) {
-      const A = shuffledSpecies[i];
-      const B = shuffledSpecies[j];
+  for (let i = 0; i < shuffled.length; i++) {
+    for (let j = i + 1; j < shuffled.length; j++) {
+      const A = shuffled[i];
+      const B = shuffled[j];
 
-      if (
-        A.speciesname === B.speciesname ||
-        A.speciesfamily !== B.speciesfamily
-      ) continue;
+      // 🚨 condiciones: misma categoría, distinto speciesname
+      if (A.featurecategory !== B.featurecategory) continue;
+      if (A.speciesname === B.speciesname) continue;
 
-      const match = A.species_feature.find((fa) =>
-        B.species_feature.some(
-          (fb) =>
-            fb.feature.category === fa.feature.category &&
-            fb.feature.featuredescription !== fa.feature.featuredescription
-        )
-      );
+      const {
+        data: { publicUrl },
+      } = supabase.storage
+        .from(BUCKET_NAME)
+        .getPublicUrl(`${A.speciesimage}.webp`);
 
-      if (!match) continue;
+      if (usedImages.has(publicUrl)) {
+        console.log(`⚠️ Imagen repetida: ${publicUrl}, se salta.`);
+        continue;
+      }
 
-      const category = match.feature.category;
-
-      const descA = A.species_feature.find(f => f.feature.category === category)?.feature.featuredescription;
-      const descB = B.species_feature.find(f => f.feature.category === category)?.feature.featuredescription;
-
-      if (!descA || !descB) continue;
-
-      const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${A.speciesimage}.webp`;
-
-      if (usedImages.has(imageUrl)) continue;
-
-      validPairs.push({
-        image: imageUrl,
+      const pair = {
+        image: publicUrl,
         correct: A.speciesname,
         distractor: B.speciesname,
         options: shuffle([A.speciesname, B.speciesname]),
         descriptions: {
-          [A.speciesname]: descA,
-          [B.speciesname]: descB
-        }
-      });
+          [A.speciesname]: A.featuredescription,
+          [B.speciesname]: B.featuredescription,
+        },
+      };
 
-      usedImages.add(imageUrl);
+      validPairs.push(pair);
+      usedImages.add(publicUrl);
     }
   }
 
-  const finalPairs = shuffle(validPairs).slice(0, 5); // Selecciona 5 aleatorios
-  console.log("Pares válidos generados aleatoriamente:", finalPairs);
+  const finalPairs = shuffle(validPairs).slice(0, 10);
+  console.log(`🎉 Total pares generados: ${validPairs.length}`);
+  console.log(`🎯 Pares devueltos: ${finalPairs.length}`);
+  console.table(finalPairs);
+
   return finalPairs;
 }
-

@@ -7,6 +7,7 @@ import Quiz from "./components/Quiz";
 import Score from "./components/Score";
 import Progress from "./components/Progress";
 import Auth from "./components/Auth";
+import About from "./components/About"; 
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
         <Route path="/score" element={<ProtectedRoute><Score /></ProtectedRoute>} />
         <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </Router>
   );

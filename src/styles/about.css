@@ -1,0 +1,20 @@
+.about-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #fdfdfd;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Aplica a todo el texto dentro del about */
+.about-container p {
+  font-size: 0.9rem; /* un poco más pequeño */
+  line-height: 1.4;
+}
+
+/* Si quieres aún más pequeño SOLO en el listado de autorías */
+.authors-text {
+  font-size: 0.8rem;
+  color: #444;
+}

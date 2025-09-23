@@ -1,68 +1,106 @@
-// Progress.jsx
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabaseClient";
 import "../styles/progress.css";
 
 export default function Progress() {
-  const [rewardSpecies, setRewardSpecies] = useState([]); // Lista de especies recompensa
-  const [userPoints, setUserPoints] = useState(0); // Puntos acumulados por el usuario
+  const [rewardSpecies, setRewardSpecies] = useState([]);
+  const [userPoints, setUserPoints] = useState(0);
 
-  const SUPABASE_URL = "https://pxsglndjxamerugltlmr.supabase.co";
+  const SUPABASE_URL = "https://fhdtpzywvbgdlusjllkx.supabase.co";
   const BUCKET_NAME = "species-images";
 
   useEffect(() => {
     const fetchData = async () => {
-      // Obtener nombre de usuario actual
       const { data: userData } = await supabase.auth.getUser();
       const user = userData?.user?.email?.split("@")[0] || "anon";
 
-      // Calcular puntos acumulados a partir de resultados
+      // puntos acumulados
       const { data: results } = await supabase
         .from("quiz_results")
         .select("finalscore")
         .eq("user", user);
 
-      const totalPoints = results?.reduce((sum, r) => sum + (r.finalscore || 0), 0) || 0;
+      const totalPoints =
+        results?.reduce((sum, r) => sum + (r.finalscore || 0), 0) || 0;
       setUserPoints(totalPoints);
 
-      // Obtener especies desbloqueables desde la base de datos
+      // traer species con reward_species = true
       const { data, error } = await supabase
-        .from("rewardspecies")
-        .select("rewardspeciesid, rewardspeciesname, rewardspeciesimage");
+        .from("species_feature_all") // 👈 tu tabla real
+        .select("speciesid, speciesname, speciesimage, reward_species")
+        .eq("reward_species", true);
 
-      if (error) console.error("Error cargando rewardspecies:", error.message);
+      if (error) {
+        console.error("❌ Error cargando reward_species:", error.message);
+        return;
+      }
 
-      // Rellenar hasta 6 cards con datos falsos si faltan. Pendiente poner mas especies.
-      const filled = [
-        ...data,
-        ...Array.from({ length: 6 - data.length }, (_, i) => ({
-          id: `placeholder-${i + 1}`,
-          name: `Especie ${data.length + i + 1}`,
-          image: null
-        }))
-      ];
+      console.log("📦 Datos crudos reward_species:", data);
 
-      setRewardSpecies(filled.slice(0, 6)); // Limitar a 6 cards
+      // quedarse SOLO con la primera fila de cada speciesid
+      const uniqueSpecies = Object.values(
+        data.reduce((acc, sp) => {
+          if (!acc[sp.speciesname]) {
+            acc[sp.speciesname] = sp; // 👈 solo la primera vez
+          }
+          return acc;
+        }, {})
+      );
+
+      console.log("✅ Especies recompensa únicas:", uniqueSpecies);
+      setRewardSpecies(uniqueSpecies);
+      
     };
 
-    fetchData(); // Ejecutar al montar
+    fetchData();
   }, []);
+
+  useEffect(() => {
+  if (rewardSpecies.length === 0 || userPoints === 0) return;
+
+  const saveUnlocks = async () => {
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData?.user?.email?.split("@")[0] || "anon";
+
+    for (let i = 0; i < rewardSpecies.length; i++) {
+      const plant = rewardSpecies[i];
+      const requiredPoints = Math.pow(2, i + 2) * 4;
+      const unlocked = userPoints >= requiredPoints;
+
+      if (unlocked) {
+        const { error } = await supabase
+          .from("user_unlocked_species")
+          .upsert(
+            { user_email: user, speciesid: plant.speciesid },
+            { onConflict: ["user_email", "speciesid"] }
+          );
+
+        if (error) {
+          console.error("❌ Error guardando especie desbloqueada:", error.message);
+        } else {
+          console.log(`🌱 Especie ${plant.speciesname} desbloqueada para ${user}`);
+        }
+      }
+    }
+  };
+
+    saveUnlocks();
+  }, [rewardSpecies, userPoints]);
 
   return (
     <main className="main-content">
       <div className="progress-container">
         <div className="rewards-panel">
           <h2 className="progress-message" style={{ textAlign: "center" }}>
-            🍀Consigue puntos para desbloquear nuevas especies!
+            🍀 Consigue puntos para desbloquear nuevas especies!
           </h2>
           <h3 className="progress-points" style={{ textAlign: "center" }}>
             Tus puntos: {userPoints}
           </h3>
 
-          {/* Cards de especies */}
           <div className="card-grid">
             {rewardSpecies.map((plant, index) => {
-              const requiredPoints = Math.pow(2, index + 2) * 4; // Ej: 16, 32, 64...
+              const requiredPoints = Math.pow(2, index + 2) * 4;
               const unlocked = userPoints >= requiredPoints;
 
               const progressPercent = Math.min(
@@ -70,28 +108,38 @@ export default function Progress() {
                 100
               );
 
+              console.log("🔍 Render card:", {
+                speciesname: plant.speciesname,
+                speciesimage: plant.speciesimage,
+                unlocked,
+                url: unlocked && plant.speciesimage
+                  ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${plant.speciesimage}`
+                  : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`
+              });
+
               return (
-                <div className="plant-card" key={plant.rewardspeciesid || index}>
-                  {/* Imagen de la planta o icono de bloqueo */}
-                  <div className={`plant-image-container ${unlocked ? "unlocked" : ""}`}>
+                <div className="plant-card" key={plant.speciesid}>
+                  <div
+                    className={`plant-image-container ${
+                      unlocked ? "unlocked" : ""
+                    }`}
+                  >
                     <img
                       className="plant-image"
                       src={
-                        unlocked && plant.rewardspeciesimage
-                          ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${plant.rewardspeciesimage}.webp`
+                        unlocked && plant.speciesimage
+                          ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${plant.speciesimage}.webp`
                           : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`
                       }
-                      alt={plant.rewardspeciesname}
+                      alt={unlocked ? plant.speciesname : "Especie bloqueada"}
                     />
-                    {/* Nombre superpuesto solo si esta desbloqueado */}
                     {unlocked && (
                       <div className="plant-name-overlay">
-                        {plant.rewardspeciesname}
+                        {plant.speciesname}
                       </div>
                     )}
                   </div>
 
-                  {/* Si no esta desbloqueada, mostrar barra de progreso */}
                   {!unlocked && (
                     <div className="plant-info">
                       <div className="progress-bar">

@@ -70,6 +70,7 @@ export default function Navbar() {
           <div className="navbar-buttons desktop-only">
             <button onClick={() => navigate("/menu")}>Inicio 🍀</button>
             <button onClick={() => navigate("/progress")}>Progreso 📈</button>
+            <button onClick={() => navigate("/about")}>Acerca de ℹ️</button>
             <button onClick={handleLogout}>Salir 🚪</button>
           </div>
         )}
@@ -87,6 +88,7 @@ export default function Navbar() {
         <div ref={menuRef} className={`slide-menu ${isMenuOpen ? "open" : ""}`}>
           <button onClick={() => { navigate("/menu"); setIsMenuOpen(false); }}>Inicio</button>
           <button onClick={() => { navigate("/progress"); setIsMenuOpen(false); }}>Progreso</button>
+          <button onClick={() => { navigate("/about"); setIsMenuOpen(false); }}>Acerca de</button>
           <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}>Salir</button>
           <button className="close-btn" onClick={() => setIsMenuOpen(false)}>X</button>
         </div>

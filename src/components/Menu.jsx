@@ -13,11 +13,6 @@ export default function Menu() {
 
       {/* Lista de beneficios del quiz */}
       <ul className="menu-list">
-        <li className="li-title">Pon a prueba tus conocimientos botánicos en un divertido quiz!</li>
-        <li>🏆 Gana puntos</li>
-        <li>🌱 Desbloquea especies</li>
-        <li>🌿 Descubre la diversidad del reino vegetal</li>
-        
       </ul>
     </main>
   );
