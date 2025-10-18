@@ -29,7 +29,8 @@ export async function loadValidPairs() {
       speciesfamily,
       speciesimage,
       reward_species,
-      copyrigth
+      copyrigth,
+      image_code
     `
     )
     .eq("reward_species", false);
@@ -107,11 +108,15 @@ export async function loadValidPairs() {
       if (A.featurecategory !== B.featurecategory) continue;
       if (A.speciesname === B.speciesname) continue;
 
-      const {
-        data: { publicUrl },
-      } = supabase.storage
-        .from(BUCKET_NAME)
-        .getPublicUrl(`${A.speciesimage}.webp`);
+      // const {
+      //   data: { publicUrl },
+      // } = supabase.storage
+      //   .from(BUCKET_NAME)
+      //   .getPublicUrl(`${A.speciesimage}.webp`);
+      const imageUrl = `${
+        import.meta.env.VITE_SUPABASE_FUNCTION_URL
+      }/get-image/${A.image_code}`;
+      const publicUrl = imageUrl;
 
       if (usedImages.has(publicUrl)) {
         console.log(`⚠️ Imagen repetida: ${publicUrl}, se salta.`);
