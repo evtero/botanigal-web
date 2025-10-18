@@ -8,7 +8,6 @@ import Progress from "./components/Progress";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Quiz from "./components/Quiz";
 import Score from "./components/Score";
-// Deploy update trigger
 
 export default function App() {
   return (
