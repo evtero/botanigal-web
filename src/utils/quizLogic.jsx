@@ -113,9 +113,10 @@ export async function loadValidPairs() {
       // } = supabase.storage
       //   .from(BUCKET_NAME)
       //   .getPublicUrl(`${A.speciesimage}.webp`);
-      const imageUrl = `${
-        import.meta.env.VITE_SUPABASE_FUNCTION_URL
-      }/get-image/${A.image_code}`;
+      // const imageUrl = `${
+      //   import.meta.env.VITE_SUPABASE_FUNCTION_URL
+      // }/get-image/${A.image_code}`;
+      const imageUrl = `https://fhdtpzywvbgdlusjllkx.functions.supabase.co/get-image/${A.image_code}`;
       const publicUrl = imageUrl;
 
       if (usedImages.has(publicUrl)) {
