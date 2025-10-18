@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loadValidPairs } from "../utils/quizLogic";
-import { supabase } from "../services/supabaseClient";
-import "../styles/quiz.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { supabase } from "../services/supabaseClient";
+import "../styles/quiz.css";
+import { loadValidPairs } from "../utils/quizLogic";
 
 export default function Quiz() {
   const [quizData, setQuizData] = useState([]);
@@ -65,7 +65,9 @@ export default function Quiz() {
   // Cargar nick del usuario
   useEffect(() => {
     const updateNick = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) {
         const email = user.email;
         const nickname = email.split("@")[0];
@@ -103,7 +105,9 @@ export default function Quiz() {
     });
 
     if (showHint && nick) {
-      toast.info("Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones.");
+      toast.info(
+        "Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones."
+      );
       localStorage.setItem(`hasSeenHint-${nick}`, "true");
       setShowHint(false);
     }
@@ -170,6 +174,9 @@ export default function Quiz() {
               className="quiz-image"
               loading="eager"
             />
+            <p className="quiz-copyright">
+              © {question.copyrigth || "Autor desconocido"}
+            </p>
           </div>
 
           <div className="quiz-right">

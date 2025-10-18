@@ -16,7 +16,8 @@ export async function loadValidPairs() {
   // 🔑 2. Especies base (reward_species = false)
   const { data: baseSpecies, error: baseError } = await supabase
     .from("species_feature_all")
-    .select(`
+    .select(
+      `
       featureid,
       featuredescription,
       featurecategory,
@@ -27,8 +28,10 @@ export async function loadValidPairs() {
       speciescname_eng,
       speciesfamily,
       speciesimage,
-      reward_species
-    `)
+      reward_species,
+      copyrigth
+    `
+    )
     .eq("reward_species", false);
 
   if (baseError) {
@@ -43,7 +46,10 @@ export async function loadValidPairs() {
     .eq("user_email", user);
 
   if (unlockedError) {
-    console.error("❌ Error cargando especies desbloqueadas:", unlockedError.message);
+    console.error(
+      "❌ Error cargando especies desbloqueadas:",
+      unlockedError.message
+    );
     return [];
   }
 
@@ -53,7 +59,8 @@ export async function loadValidPairs() {
   if (unlockedIds.length > 0) {
     const { data, error } = await supabase
       .from("species_feature_all")
-      .select(`
+      .select(
+        `
         featureid,
         featuredescription,
         featurecategory,
@@ -65,11 +72,15 @@ export async function loadValidPairs() {
         speciesfamily,
         speciesimage,
         reward_species
-      `)
+      `
+      )
       .in("speciesid", unlockedIds);
 
     if (error) {
-      console.error("❌ Error cargando detalles de especies desbloqueadas:", error.message);
+      console.error(
+        "❌ Error cargando detalles de especies desbloqueadas:",
+        error.message
+      );
     } else {
       unlockedSpecies = data || [];
     }
