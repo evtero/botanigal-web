@@ -265,12 +265,19 @@
     justify-content: space-between;
     padding-top: 1rem;
   }
+}
 
-  .quiz-copyright {
-    font-size: 0.75rem;
-    font-style: italic;
-    opacity: 0.7;
-    margin-top: 4px;
-    text-align: center;
-  }
+.quiz-image-wrapper {
+  flex: 0 0 70%; /* Igual que antes */
+  display: flex;
+  flex-direction: column;
+  height: 650px; /* Mantiene el alto original */
+}
+
+.quiz-copyright {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #666;
+  text-align: right;
+  margin-top: 4px;
 }

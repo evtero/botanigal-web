@@ -127,6 +127,7 @@ export async function loadValidPairs() {
           [A.speciesname]: A.featuredescription,
           [B.speciesname]: B.featuredescription,
         },
+        copyrigth: A.copyrigth,
       };
 
       validPairs.push(pair);
@@ -137,6 +138,7 @@ export async function loadValidPairs() {
   const finalPairs = shuffle(validPairs).slice(0, 10);
   console.log(`🎉 Total pares generados: ${validPairs.length}`);
   console.log(`🎯 Pares devueltos: ${finalPairs.length}`);
+  console.log("Ejemplo de copyrigth:", rows[0]?.copyrigth);
   console.table(finalPairs);
 
   return finalPairs;

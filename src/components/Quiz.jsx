@@ -167,13 +167,15 @@ export default function Quiz() {
         </div>
 
         <div className="quiz-body">
-          <div className="quiz-image-container">
-            <img
-              src={question.image}
-              alt="Planta"
-              className="quiz-image"
-              loading="eager"
-            />
+          <div className="quiz-image-wrapper">
+            <div className="quiz-image-container">
+              <img
+                src={question.image}
+                alt="Planta"
+                className="quiz-image"
+                loading="eager"
+              />
+            </div>
             <p className="quiz-copyright">
               © {question.copyrigth || "Autor desconocido"}
             </p>
