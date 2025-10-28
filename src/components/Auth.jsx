@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { supabase } from "../services/supabaseClient";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../services/supabaseClient";
 import "../styles/auth.css";
 
 export default function Auth() {
@@ -35,10 +35,21 @@ export default function Auth() {
     else navigate("/menu");
   };
 
+  useEffect(() => {
+    (async () => {
+      const session = await supabase.auth.getSession();
+      console.log("🔍 getSession:", session);
+      const user = await supabase.auth.getUser();
+      console.log("👤 getUser:", user);
+    })();
+  }, []);
+
   return (
     <div className="auth-wrapper single">
       <div className="auth-panel">
-        <h2>{mode === "login" ? "🌸 Inicia sesion 🌸" : "🌱 Nuevo usuario 🌱"}</h2>
+        <h2>
+          {mode === "login" ? "🌸 Inicia sesion 🌸" : "🌱 Nuevo usuario 🌱"}
+        </h2>
 
         <form onSubmit={handleSubmit}>
           <input
