@@ -106,7 +106,8 @@ export default function Quiz() {
 
     if (showHint && nick) {
       toast.info(
-        "Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones."
+        "Recuerda que en cada pregunta puedes consultar la descripción de ambas opciones. PERO solo se cuenta la primera que selecciones.",
+        { autoClose: 8000 }
       );
       localStorage.setItem(`hasSeenHint-${nick}`, "true");
       setShowHint(false);

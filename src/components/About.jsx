@@ -58,14 +58,6 @@ export default function About() {
         </a>
         .
       </p>
-
-      <p>Autorías de imágenes y descripciones:</p>
-      <p className="authors-text">
-        {authors.length > 0
-        ? authors.join("; ")
-        : "Cargando lista de autorías..."}
-    </p>
-
     </main>
   );
 }
