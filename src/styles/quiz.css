@@ -139,6 +139,7 @@
 .feedback-message {
   font-size: calc(var(--font-size-base) - 0.1rem);
   font-weight: bold;
+  font-style: normal;
   margin: 0;
 }
 
@@ -153,6 +154,7 @@
 .feedback-description {
   font-size: calc(var(--font-size-base) - 0.1rem);
   margin: 0;
+  font-style: italic;
 }
 
 .feedback-correct {
@@ -280,4 +282,14 @@
   color: #666;
   text-align: right;
   margin-top: 4px;
+}
+
+.quiz-family {
+  font-size: 1rem; /* un poco más grande que el copyright */
+  font-style: normal; /* mantiene coherencia visual */
+  color: #535353; /* un verde suave natural */
+  text-align: center; /* centrado debajo de la imagen o del nombre */
+  margin-top: 0.15rem;
+  margin-bottom: 0.55rem;
+  font-weight: bold;
 }

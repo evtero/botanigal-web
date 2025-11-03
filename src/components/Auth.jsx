@@ -48,7 +48,7 @@ export default function Auth() {
     <div className="auth-wrapper single">
       <div className="auth-panel">
         <h2>
-          {mode === "login" ? "🌸 Inicia sesion 🌸" : "🌱 Nuevo usuario 🌱"}
+          {mode === "login" ? "🌸 Inicia sesión 🌸" : "🌱 Nuevo usuario 🌱"}
         </h2>
 
         <form onSubmit={handleSubmit}>

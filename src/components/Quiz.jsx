@@ -223,6 +223,8 @@ export default function Quiz() {
                     {feedbackText.message}
                   </p>
                   <p className="feedback-name">{feedbackText.name}</p>
+                  <p className="quiz-family">F. {question.family}</p>{" "}
+                  {/* family added */}
                   <p
                     className={`feedback-description ${
                       feedbackText.isCorrect

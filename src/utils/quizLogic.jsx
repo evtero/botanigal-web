@@ -72,7 +72,9 @@ export async function loadValidPairs() {
         speciescname_eng,
         speciesfamily,
         speciesimage,
-        reward_species
+        reward_species,
+        copyrigth,
+        image_code
       `
       )
       .in("speciesid", unlockedIds);
@@ -134,6 +136,7 @@ export async function loadValidPairs() {
           [B.speciesname]: B.featuredescription,
         },
         copyrigth: A.copyrigth,
+        family: A.speciesfamily,
       };
 
       validPairs.push(pair);
