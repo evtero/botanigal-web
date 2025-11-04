@@ -1,6 +1,6 @@
 # 🌿 Quiz App
 
-Aplicación web educativa para identificar especies mediante un juego tipo quiz.  
+Aplicación web educativa para identificar especies vegetales mediante un juego tipo quiz.  
 Desarrollada con **React + Vite** y conectada a **Supabase**.
 
 🚧 _Proyecto en desarrollo._
