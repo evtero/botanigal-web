@@ -91,6 +91,7 @@ export default function Quiz() {
     setSelected(option);
     const isCorrect = option === question.correct;
     const description = question.descriptions[option];
+    const family = question.families[option];
 
     if (!answered) {
       if (isCorrect) setScore((prev) => prev + 1);
@@ -101,6 +102,7 @@ export default function Quiz() {
       message: isCorrect ? "✅ Correcto" : "❌ Incorrecto",
       name: option,
       description,
+      family,
       isCorrect,
     });
 
@@ -223,7 +225,9 @@ export default function Quiz() {
                     {feedbackText.message}
                   </p>
                   <p className="feedback-name">{feedbackText.name}</p>
-                  <p className="quiz-family">F. {question.family}</p>{" "}
+                  {feedbackText.family && (
+                    <p className="quiz-family">F. {feedbackText.family}</p>
+                  )}
                   {/* family added */}
                   <p
                     className={`feedback-description ${

@@ -136,7 +136,10 @@ export async function loadValidPairs() {
           [B.speciesname]: B.featuredescription,
         },
         copyrigth: A.copyrigth,
-        family: A.speciesfamily,
+        families: {
+          [A.speciesname]: A.speciesfamily,
+          [B.speciesname]: B.speciesfamily,
+        },
       };
 
       validPairs.push(pair);
