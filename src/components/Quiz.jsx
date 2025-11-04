@@ -225,6 +225,21 @@ export default function Quiz() {
                     {feedbackText.message}
                   </p>
                   <p className="feedback-name">{feedbackText.name}</p>
+                  {question.commonNames &&
+                    (() => {
+                      const common = question.commonNames[feedbackText.name];
+                      if (!common) return null;
+                      const spa = common.spa?.toLowerCase() || "";
+                      const gal = common.gal?.toLowerCase() || "";
+                      if (!spa && !gal) return null;
+                      const same = spa === gal;
+                      return (
+                        <p className="quiz-common">
+                          {same ? spa : [spa, gal].filter(Boolean).join(", ")}
+                        </p>
+                      );
+                    })()}
+
                   {feedbackText.family && (
                     <p className="quiz-family">F. {feedbackText.family}</p>
                   )}

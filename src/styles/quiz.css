@@ -132,7 +132,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.1rem;
   flex-wrap: wrap;
 }
 
@@ -285,11 +285,38 @@
 }
 
 .quiz-family {
-  font-size: 1rem; /* un poco más grande que el copyright */
-  font-style: normal; /* mantiene coherencia visual */
-  color: #535353; /* un verde suave natural */
-  text-align: center; /* centrado debajo de la imagen o del nombre */
+  font-size: 1.1rem;
+  font-style: normal;
+  color: #535353;
+  text-align: center;
   margin-top: 0.15rem;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.25rem; /* 🔹 más compacto */
   font-weight: bold;
+}
+
+/* 🔹 nombre común (más pequeño, márgenes reducidos) */
+.quiz-common {
+  font-size: calc(var(--font-size-base) - 0.1rem);
+  color: #333;
+  text-transform: lowercase;
+  margin-top: 0.3rem;
+  margin-bottom: 0.1rem;
+  line-height: 1.1;
+}
+
+/* 🔹 compactar márgenes entre Correcto/Incorrecto, nombre común y familia */
+.feedback-message,
+.feedback-name,
+.quiz-common,
+.quiz-family {
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+
+/* 🔹 descripción más pequeña y más compacta */
+.feedback-description {
+  font-size: calc(var(--font-size-base) - 0.1rem);
+  margin-top: 0.6rem;
+  line-height: 1.3;
 }

@@ -131,6 +131,16 @@ export async function loadValidPairs() {
         correct: A.speciesname,
         distractor: B.speciesname,
         options: shuffle([A.speciesname, B.speciesname]),
+        commonNames: {
+          [A.speciesname]: {
+            spa: A.speciescname_spa,
+            gal: A.speciescname_gal,
+          },
+          [B.speciesname]: {
+            spa: B.speciescname_spa,
+            gal: B.speciescname_gal,
+          },
+        },
         descriptions: {
           [A.speciesname]: A.featuredescription,
           [B.speciesname]: B.featuredescription,
