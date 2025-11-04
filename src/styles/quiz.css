@@ -154,7 +154,7 @@
 .feedback-description {
   font-size: calc(var(--font-size-base) - 0.1rem);
   margin: 0;
-  font-style: italic;
+  font-style: normal;
 }
 
 .feedback-correct {
