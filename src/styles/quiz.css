@@ -110,7 +110,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-style: italic;
+  font-style: normal;
   color: var(--secondary-color, #555);
   text-align: center;
   overflow-y: auto;

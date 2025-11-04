@@ -1,39 +1,10 @@
 // About.jsx
-import { useEffect, useState } from "react";
-import { supabase } from "../services/supabaseClient";
+import { useEffect } from "react";
 import "../styles/about.css";
 
 export default function About() {
-  const [authors, setAuthors] = useState([]);
-
   useEffect(() => {
-    const fetchAuthors = async () => {
-      const { data, error } = await supabase
-        .from("species_feature_all")
-        .select("speciesname, copyrigth");
-
-      if (error) {
-        console.error("❌ Error cargando autorías:", error.message);
-        return;
-      }
-
-      // Agrupar especies por usuario (copyrigth)
-      const grouped = data.reduce((acc, row) => {
-        if (!row.copyrigth) return acc;
-        if (!acc[row.copyrigth]) acc[row.copyrigth] = new Set();
-        acc[row.copyrigth].add(row.speciesname);
-        return acc;
-      }, {});
-
-      // Convertir a array de strings: "usuario: especie1, especie2"
-      const formatted = Object.entries(grouped).map(
-        ([author, speciesSet]) => `${author}: ${[...speciesSet].join(", ")}`
-      );
-
-      setAuthors(formatted);
-    };
-
-    fetchAuthors();
+    // Si en el futuro necesitas cargar algo desde Supabase o hacer un efecto secundario, hazlo aquí.
   }, []);
 
   return (
