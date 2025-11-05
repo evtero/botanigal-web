@@ -47,6 +47,9 @@ export default function Auth() {
   return (
     <div className="auth-wrapper single">
       <div className="auth-panel">
+        <p className="auth-intro">
+          Descubre y aprende sobre especies de plantas con este quiz!{" "}
+        </p>
         <h2>
           {mode === "login" ? "🌸 Inicia sesión 🌸" : "🌱 Nuevo usuario 🌱"}
         </h2>

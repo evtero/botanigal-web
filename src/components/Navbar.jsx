@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/navbar.css";
 import { supabase } from "../services/supabaseClient";
-
+import "../styles/navbar.css";
 
 export default function Navbar() {
   const menuRef = useRef(null);
@@ -16,11 +15,11 @@ export default function Navbar() {
         setIsMenuOpen(false);
       }
     };
-  
+
     if (isMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-  
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -28,12 +27,13 @@ export default function Navbar() {
 
   // Obtiene el usuario actual y extrae el nick (antes del @)
   const updateNick = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (user) {
       const email = user.email;
       const nickname = email.split("@")[0];
       setNick(nickname);
-      
     } else {
       setNick(null);
     }
@@ -65,7 +65,7 @@ export default function Navbar() {
       <nav className="navbar">
         <h1 className="navbar-title">🌿botanigal</h1>
         {nick && <span className="nickname desktop-only">{nick}</span>}
-        
+
         {nick && (
           <div className="navbar-buttons desktop-only">
             <button onClick={() => navigate("/menu")}>Inicio 🍀</button>
@@ -75,22 +75,50 @@ export default function Navbar() {
           </div>
         )}
 
-
-        {nick && (
-          <span className="nickname-mobile mobile-only">{nick}</span>
-        )}
-        <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>☰</div>
+        {nick && <span className="nickname-mobile mobile-only">{nick}</span>}
+        <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          ☰
+        </div>
       </nav>
 
       {/* Slide menu solo en móvil */}
       {nick && (
-        
         <div ref={menuRef} className={`slide-menu ${isMenuOpen ? "open" : ""}`}>
-          <button onClick={() => { navigate("/menu"); setIsMenuOpen(false); }}>Inicio</button>
-          <button onClick={() => { navigate("/progress"); setIsMenuOpen(false); }}>Progreso</button>
-          <button onClick={() => { navigate("/about"); setIsMenuOpen(false); }}>Acerca de</button>
-          <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}>Salir</button>
-          <button className="close-btn" onClick={() => setIsMenuOpen(false)}>X</button>
+          <button
+            onClick={() => {
+              navigate("/menu");
+              setIsMenuOpen(false);
+            }}
+          >
+            Inicio
+          </button>
+          <button
+            onClick={() => {
+              navigate("/progress");
+              setIsMenuOpen(false);
+            }}
+          >
+            Progreso
+          </button>
+          <button
+            onClick={() => {
+              navigate("/about");
+              setIsMenuOpen(false);
+            }}
+          >
+            Acerca de
+          </button>
+          <button
+            onClick={() => {
+              handleLogout();
+              setIsMenuOpen(false);
+            }}
+          >
+            Salir
+          </button>
+          <button className="close-btn" onClick={() => setIsMenuOpen(false)}>
+            X
+          </button>
         </div>
       )}
     </>

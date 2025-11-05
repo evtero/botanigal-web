@@ -13,7 +13,6 @@
   font-size: calc(var(--font-size-base) + 0.2rem);
 }
 
-
 .navbar-buttons button {
   width: auto;
   background-color: transparent;
@@ -96,10 +95,7 @@
   font-size: calc(var(--font-size-base) + 0.2rem);
   font-weight: bold;
   background-color: transparent;
-  
-
 }
-
 
 @media (max-width: 600px) {
   .navbar {
@@ -123,7 +119,7 @@
     top: 100%; /* debajo de la navbar */
     right: 1rem;
     background-color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 0.5rem;
     border-radius: 8px;
     display: none;
@@ -153,5 +149,4 @@
   .nickname-mobile {
     display: inline-block;
   }
-
 }
