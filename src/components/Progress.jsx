@@ -28,7 +28,8 @@ export default function Progress() {
       const { data, error } = await supabase
         .from("species_feature_all") // 👈 tu tabla real
         .select("speciesid, speciesname, speciesimage, reward_species")
-        .eq("reward_species", true);
+        .eq("reward_species", true)
+        .eq("show", "prod");
 
       if (error) {
         console.error("❌ Error cargando reward_species:", error.message);
@@ -44,45 +45,49 @@ export default function Progress() {
             acc[sp.speciesname] = sp; // 👈 solo la primera vez
           }
           return acc;
-        }, {})
+        }, {}),
       );
 
       console.log("✅ Especies recompensa únicas:", uniqueSpecies);
       setRewardSpecies(uniqueSpecies);
-      
     };
 
     fetchData();
   }, []);
 
   useEffect(() => {
-  if (rewardSpecies.length === 0 || userPoints === 0) return;
+    if (rewardSpecies.length === 0 || userPoints === 0) return;
 
-  const saveUnlocks = async () => {
-    const { data: userData } = await supabase.auth.getUser();
-    const user = userData?.user?.email?.split("@")[0] || "anon";
+    const saveUnlocks = async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      const user = userData?.user?.email?.split("@")[0] || "anon";
 
-    for (let i = 0; i < rewardSpecies.length; i++) {
-      const plant = rewardSpecies[i];
-      const requiredPoints = Math.pow(2, i + 2) * 4;
-      const unlocked = userPoints >= requiredPoints;
+      for (let i = 0; i < rewardSpecies.length; i++) {
+        const plant = rewardSpecies[i];
+        const requiredPoints = Math.pow(2, i + 2) * 4;
+        const unlocked = userPoints >= requiredPoints;
 
-      if (unlocked) {
-        const { error } = await supabase
-          .from("user_unlocked_species")
-          .upsert(
-            { user_email: user, speciesid: plant.speciesid },
-            { onConflict: ["user_email", "speciesid"] }
-          );
+        if (unlocked) {
+          const { error } = await supabase
+            .from("user_unlocked_species")
+            .upsert(
+              { user_email: user, speciesid: plant.speciesid },
+              { onConflict: ["user_email", "speciesid"] },
+            );
 
-        if (error) {
-          console.error("❌ Error guardando especie desbloqueada:", error.message);
-        } else {
-          console.log(`🌱 Especie ${plant.speciesname} desbloqueada para ${user}`);
+          if (error) {
+            console.error(
+              "❌ Error guardando especie desbloqueada:",
+              error.message,
+            );
+          } else {
+            console.log(
+              `🌱 Especie ${plant.speciesname} desbloqueada para ${user}`,
+            );
+          }
         }
       }
-    }
-  };
+    };
 
     saveUnlocks();
   }, [rewardSpecies, userPoints]);
@@ -105,16 +110,17 @@ export default function Progress() {
 
               const progressPercent = Math.min(
                 (userPoints / requiredPoints) * 100,
-                100
+                100,
               );
 
               console.log("🔍 Render card:", {
                 speciesname: plant.speciesname,
                 speciesimage: plant.speciesimage,
                 unlocked,
-                url: unlocked && plant.speciesimage
-                  ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${plant.speciesimage}`
-                  : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`
+                url:
+                  unlocked && plant.speciesimage
+                    ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${plant.speciesimage}`
+                    : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`,
               });
 
               return (
