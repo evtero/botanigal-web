@@ -27,7 +27,9 @@ export default function Progress() {
       // traer species con reward_species = true
       const { data, error } = await supabase
         .from("species_feature_all") // 👈 tu tabla real
-        .select("speciesid, speciesname, speciesimage, reward_species")
+        .select(
+          "speciesid, speciesname, speciesimage, reward_species, image_code",
+        )
         .eq("reward_species", true)
         .eq("show", "prod");
 
@@ -119,7 +121,7 @@ export default function Progress() {
                 unlocked,
                 url:
                   unlocked && plant.speciesimage
-                    ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${plant.speciesimage}`
+                    ? `https://fhdtpzywvbgdlusjllkx.functions.supabase.co/get-image/${plant.image_code}`
                     : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`,
               });
 
