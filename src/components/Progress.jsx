@@ -136,7 +136,7 @@ export default function Progress() {
                       className="plant-image"
                       src={
                         unlocked && plant.speciesimage
-                          ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${plant.speciesimage}.webp`
+                          ? `https://fhdtpzywvbgdlusjllkx.functions.supabase.co/get-image/${plant.image_code}`
                           : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`
                       }
                       alt={unlocked ? plant.speciesname : "Especie bloqueada"}
