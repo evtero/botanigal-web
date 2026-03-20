@@ -14,14 +14,27 @@ export default function Progress() {
       const { data: userData } = await supabase.auth.getUser();
       const user = userData?.user?.email?.split("@")[0] || "anon";
 
-      // puntos acumulados
-      const { data: results } = await supabase
-        .from("quiz_results")
-        .select("finalscore")
-        .eq("user", user);
+      // // puntos acumulados
+      // const { data: results } = await supabase
+      //   .from("quiz_results")
+      //   .select("finalscore")
+      //   .eq("user", user);
 
-      const totalPoints =
-        results?.reduce((sum, r) => sum + (r.finalscore || 0), 0) || 0;
+      const { data: stats, error: statsError } = await supabase
+        .from("user_quiz_stats")
+        .select("total_points, games_played, last_played_at")
+        .eq("user", user)
+        .maybeSingle();
+
+      if (statsError) {
+        // console.error("❌ Error cargando stats:", statsError.message);
+      }
+
+      // const totalPoints =
+      //   stats?.reduce((sum, r) => sum + (r.finalscore || 0), 0) || 0;
+      // setUserPoints(totalPoints);
+
+      const totalPoints = stats?.total_points || 0;
       setUserPoints(totalPoints);
 
       // traer species con reward_species = true
@@ -30,15 +43,15 @@ export default function Progress() {
         .select(
           "speciesid, speciesname, speciesimage, reward_species, image_code",
         )
-        .eq("reward_species", true)
-        .eq("show", "prod");
+        .eq("reward_species", true);
+      // .eq("show", "prod");
 
       if (error) {
-        console.error("❌ Error cargando reward_species:", error.message);
+        // console.error("❌ Error cargando reward_species:", error.message);
         return;
       }
 
-      console.log("📦 Datos crudos reward_species:", data);
+      // console.log("📦 Datos crudos reward_species:", data);
 
       // quedarse SOLO con la primera fila de cada speciesid
       const uniqueSpecies = Object.values(
@@ -50,7 +63,7 @@ export default function Progress() {
         }, {}),
       );
 
-      console.log("✅ Especies recompensa únicas:", uniqueSpecies);
+      // console.log("✅ Especies recompensa únicas:", uniqueSpecies);
       setRewardSpecies(uniqueSpecies);
     };
 
@@ -66,7 +79,8 @@ export default function Progress() {
 
       for (let i = 0; i < rewardSpecies.length; i++) {
         const plant = rewardSpecies[i];
-        const requiredPoints = Math.pow(2, i + 2) * 4;
+        // const requiredPoints = Math.pow(2, i + 2) * 4;
+        const requiredPoints = (i + 1) * 40;
         const unlocked = userPoints >= requiredPoints;
 
         if (unlocked) {
@@ -78,14 +92,15 @@ export default function Progress() {
             );
 
           if (error) {
-            console.error(
-              "❌ Error guardando especie desbloqueada:",
-              error.message,
-            );
+            // console.error(
+            //   "❌ Error guardando especie desbloqueada:",
+            //   error.message,
+            // );
           } else {
-            console.log(
-              `🌱 Especie ${plant.speciesname} desbloqueada para ${user}`,
-            );
+            // console
+            //   .log
+            //   // `🌱 Especie ${plant.speciesname} desbloqueada para ${user}`,
+            //   ();
           }
         }
       }
@@ -107,7 +122,8 @@ export default function Progress() {
 
           <div className="card-grid">
             {rewardSpecies.map((plant, index) => {
-              const requiredPoints = Math.pow(2, index + 2) * 4;
+              // const requiredPoints = Math.pow(2, index + 2) * 4;
+              const requiredPoints = (index + 1) * 40;
               const unlocked = userPoints >= requiredPoints;
 
               const progressPercent = Math.min(
@@ -115,15 +131,15 @@ export default function Progress() {
                 100,
               );
 
-              console.log("🔍 Render card:", {
-                speciesname: plant.speciesname,
-                speciesimage: plant.speciesimage,
-                unlocked,
-                url:
-                  unlocked && plant.speciesimage
-                    ? `https://fhdtpzywvbgdlusjllkx.functions.supabase.co/get-image/${plant.image_code}`
-                    : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`,
-              });
+              // console.log("🔍 Render card:", {
+              //   speciesname: plant.speciesname,
+              //   speciesimage: plant.speciesimage,
+              //   unlocked,
+              //   url:
+              //     unlocked && plant.speciesimage
+              //       ? `https://fhdtpzywvbgdlusjllkx.functions.supabase.co/get-image/${plant.image_code}`
+              //       : `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/unlock.webp`,
+              // });
 
               return (
                 <div className="plant-card" key={plant.speciesid}>

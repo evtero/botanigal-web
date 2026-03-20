@@ -34,11 +34,11 @@ export async function loadValidPairs() {
       show
     `,
     )
-    .eq("reward_species", false)
-    .eq("show", "prod");
+    .eq("reward_species", false);
+  // .eq("show", "prod");
 
   if (baseError) {
-    console.error("❌ Error al cargar especies base:", baseError.message);
+    // console.error("❌ Error al cargar especies base:", baseError.message);
     return [];
   }
 
@@ -81,8 +81,8 @@ export async function loadValidPairs() {
         show
       `,
       )
-      .in("speciesid", unlockedIds)
-      .eq("show", "prod");
+      .in("speciesid", unlockedIds);
+    // .eq("show", "prod");
 
     if (error) {
       // console.error(
@@ -168,6 +168,12 @@ export async function loadValidPairs() {
       };
 
       validPairs.push(pair); // PAR VALIDO
+      // si son de la misma familia, lo metemos varias veces
+      if (A.speciesfamily === B.speciesfamily) {
+        validPairs.push(pair);
+        validPairs.push(pair);
+        validPairs.push(pair);
+      }
       usedImages.add(publicUrl);
     }
   }

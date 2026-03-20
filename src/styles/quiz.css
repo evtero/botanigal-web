@@ -285,7 +285,7 @@
 }
 
 .quiz-family {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-style: normal;
   color: #535353;
   text-align: center;
@@ -316,7 +316,7 @@
 
 /* descripción más pequeña y más compacta */
 .feedback-description {
-  font-size: calc(var(--font-size-base) - 0.05rem);
+  font-size: calc(var(--font-size-base) - 0.15rem);
   margin-top: 0.6rem;
   line-height: 1.3;
 }

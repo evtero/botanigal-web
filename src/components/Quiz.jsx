@@ -141,27 +141,68 @@ export default function Quiz() {
       });
     } else {
       // si era la ultima pregunta, obtiene el usuario actual
+      // const { data: userData } = await supabase.auth.getUser();
+      // const user = userData?.user?.email?.split("@")[0] || "anon";
+
+      // descartado para no acumular filas
+      // Cuenta cuantas rondas previas tiene ese usuario
+      // const { count } = await supabase
+      //   .from("quiz_results")
+      //   .select("*", { count: "exact", head: true })
+      //   .eq("user", user);
+
+      // const ronda = (count || 0) + 1; // nueva ronda es la siguiente
+
+      // // guarda resultado en BD
+      // const { error } = await supabase.from("quiz_results").insert({
+      //   user,
+      //   ronda,
+      //   finalscore: score,
+      //   date: new Date().toISOString(),
+      // });
+
+      // if (error) {
+      //   console.error("❌ Error al guardar resultado:", error.message);
+      // }
+
+      // // navega a la pantalla final para mostrar resultado
+      // navigate("/score", {
+      //   state: {
+      //     score,
+      //     total: quizData.length,
+      //     ronda,
+      //   },
+      // });
+
+      // si era la ultima pregunta, obtiene el usuario actual
       const { data: userData } = await supabase.auth.getUser();
       const user = userData?.user?.email?.split("@")[0] || "anon";
 
-      // Cuenta cuantas rondas previas tiene ese usuario
-      const { count } = await supabase
-        .from("quiz_results")
-        .select("*", { count: "exact", head: true })
-        .eq("user", user);
+      // busca si ya existe fila para ese usuario
+      const { data: existingStats, error: fetchError } = await supabase
+        .from("user_quiz_stats")
+        .select("user, total_points, games_played")
+        .eq("user", user)
+        .maybeSingle();
 
-      const ronda = (count || 0) + 1; // nueva ronda es la siguiente
+      if (fetchError) {
+        // console.error("❌ Error al leer estadísticas:", fetchError.message);
+      } else {
+        const newTotalPoints = (existingStats?.total_points || 0) + score;
+        const newGamesPlayed = (existingStats?.games_played || 0) + 1;
 
-      // guarda resultado en BD
-      const { error } = await supabase.from("quiz_results").insert({
-        user,
-        ronda,
-        finalscore: score,
-        date: new Date().toISOString(),
-      });
+        const { error: saveError } = await supabase
+          .from("user_quiz_stats")
+          .upsert({
+            user,
+            total_points: newTotalPoints,
+            games_played: newGamesPlayed,
+            last_played_at: new Date().toISOString(),
+          });
 
-      if (error) {
-        console.error("❌ Error al guardar resultado:", error.message);
+        if (saveError) {
+          // console.error("❌ Error al guardar estadísticas:", saveError.message);
+        }
       }
 
       // navega a la pantalla final para mostrar resultado
@@ -169,7 +210,6 @@ export default function Quiz() {
         state: {
           score,
           total: quizData.length,
-          ronda,
         },
       });
     }
